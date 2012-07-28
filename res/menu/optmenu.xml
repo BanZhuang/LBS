@@ -58,5 +58,9 @@
         android:id="@+id/about"
         android:title="About"
         android:alphabeticShortcut="b" />
+      <item 
+        android:id="@+id/list"
+        android:title="Lost"
+        android:alphabeticShortcut="b" />
 
 </menu>

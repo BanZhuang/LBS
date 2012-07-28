@@ -1,14 +1,10 @@
 package ms.android.finalProject;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.List;
 
 import ms.android.facebook.FacebookIntegration;
-import ms.android.facebookSDK.AsyncFacebookRunner;
-import ms.android.facebookSDK.DialogError;
-import ms.android.facebookSDK.Facebook;
-import ms.android.facebookSDK.Facebook.DialogListener;
-import ms.android.facebookSDK.FacebookError;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -53,39 +49,24 @@ public class FindYourSelfActivity extends MapActivity {
 	String urAddress;
 	private static final String TAG = "FindYour";
 	//----------------fb data
-	private static final String TAGf = "FindYour";
-	// Your Facebook APP ID
-    private static String APP_ID = "414590081908892"; // Replace your App ID here
     public FacebookIntegration mFacebook;
  
     // Instance of Facebook Class
   
     String FILENAME = "AndroidSSO_data";
-    private SharedPreferences mPrefs;
 	//--------------------------
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         
-        //showing the available providers
-        //final Dialog dialog = new Dialog(getBaseContext());
-		//dialog.setContentView(R.layout.selnetworkdialog);
-		//dialog.setTitle("Available...");
-      /*  
-        facebook = new Facebook(APP_ID);
-        mAsyncRunner = new AsyncFacebookRunner(facebook);
-        */
+      
         mv = (MapView) findViewById(R.id.mapv);
         txtInfo = (TextView) findViewById(R.id.lbluradd);
         locM = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         geocoder = new Geocoder(context);
-        //getting providers available
-        //List<String> providers = locM.getProviders(true);
-        //for (String provider : providers) {
-        	//Toast.makeText(getBaseContext(), provider, Toast.LENGTH_LONG).show();
-        //}
-        Log.i(TAG, "b4 if");
+       
+       
         if(locM.isProviderEnabled(LocationManager.GPS_PROVIDER))
         {
         	locM.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, new GeoUpdateHandler());
@@ -95,16 +76,14 @@ public class FindYourSelfActivity extends MapActivity {
         else
         {
         	Log.i(TAG, "start else");
-        	//AlertMessage2Show("Enable GPS Device");
-        	//Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-        	//startActivity(intent);
+        
         	AlertDialog.Builder alert_box=new AlertDialog.Builder(this);
         	alert_box.setIcon(R.drawable.info);
         	alert_box.setMessage("GPS Location Provider is disabled, do you want to enable ?");
         	alert_box.setPositiveButton("Yes",new DialogInterface.OnClickListener() {
         	@Override
         	public void onClick(DialogInterface dialog, int which) {
-        	// TODO Auto-generated method stub
+        	
         		Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
         		startActivity(intent);
         		locM.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, new GeoUpdateHandler());
@@ -115,18 +94,14 @@ public class FindYourSelfActivity extends MapActivity {
         	alert_box.setNegativeButton("No", new DialogInterface.OnClickListener() {
         	@Override
         	public void onClick(DialogInterface dialog, int which) {
-        	// TODO Auto-generated method stub
-        		Log.i(TAG, "b4 toast");
+
         		Toast.makeText(getBaseContext(), "Your Current Location will be found using Network Provider", Toast.LENGTH_LONG).show();
-        		Log.i(TAG, "b4 criteria");
-        		Criteria criteria = new Criteria();
-        		Log.i(TAG, "start criteria");
-        		//provider = locM.getBestProvider(criteria, false);
+
         		provider = LocationManager.NETWORK_PROVIDER;
-        		Log.i(TAG, "b4 provider");
+        		
         		location = locM.getLastKnownLocation(provider);
         		//location = locM.
-        		Log.i(TAG, provider);
+        		
         		if(location == null)
         		{
         			Toast.makeText(getBaseContext(), "No Location Object", Toast.LENGTH_LONG).show();
@@ -134,25 +109,18 @@ public class FindYourSelfActivity extends MapActivity {
         		}
         		lat = (int) (location.getLatitude() * 1E6);
     			lng = (int) (location.getLongitude() * 1E6);
-    			Log.i(TAG, "b4 gp");
+    		
     			gp = new GeoPoint(lat, lng);
-    			Log.i(TAG, "map view");
+    			
     			mv.getController().setCenter(gp);
     			mv.getController().setZoom(14);
     			mv.getController().animateTo(gp);
         	}
         	});
         	alert_box.show();
-        	//using other criteria to search for a location
-        	// Get the location manager
-    		//locM = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-    		// Define the criteria how to select the location provider -> use
-    		// default
-        	
         	
         }
-        //mv.setSatellite(true);
-        //mv.getController().setZoom(11);
+       
         mv.setBuiltInZoomControls(true);
     }
     
@@ -292,10 +260,7 @@ public class FindYourSelfActivity extends MapActivity {
 				if(location != null)
 				{
 					//---------------------default sms of system
-					/*Intent sendIntent = new Intent(Intent.ACTION_VIEW);         
-					sendIntent.setData(Uri.parse("sms:"));
-					sendIntent.putExtra("sms_body", urAddress + "\nYou can check the location on map via link given below\n\nhttp://maps.google.com/maps/?q=" + location.getLatitude() + "," + location.getLongitude());
-					startActivity(sendIntent);*/
+				
 					Intent smsloc = new Intent(FindYourSelfActivity.this,smsit.class);
 					Bundle smsbun = new Bundle();
 		            //adding data of message body in form of address
@@ -319,7 +284,7 @@ public class FindYourSelfActivity extends MapActivity {
 	            Bundle b = new Bundle();
 	            //adding data
 	            b.putString("email_message", urAddress + "\nYou can check the location on map via link given below\n\nhttp://maps.google.com/maps/?q=" + location.getLatitude() + "," + location.getLongitude());
-	            //b.putInt("state", Integer.parseInt(txt2.getText().toString()));  
+	            
 	            //Add the set of extended data to the intent and start it
 	            mailIntent.putExtras(b);
 	            startActivity(mailIntent); 
@@ -364,10 +329,29 @@ public class FindYourSelfActivity extends MapActivity {
 				Intent hotelsearch = new Intent(FindYourSelfActivity.this,selectCityHotel.class);
 				startActivity(hotelsearch);
 				break;
+			case R.id.list:
+				getUserList();
+				break;
 			}
 			return(super.onOptionsItemSelected(item));
 		}
 		
+		private void getUserList() {
+			try {
+				if(mFacebook != null){
+				String response = mFacebook.facebookConnector.facebook.request("me/friends");
+				Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
+				}
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+
 		private void sendOnFacebook() {
 			mFacebook = new FacebookIntegration(this, getApplicationContext());
 			mFacebook.postMessage();
@@ -381,96 +365,21 @@ public class FindYourSelfActivity extends MapActivity {
 			Log.i(TAG, "func find address");
 			try {
 			      List<Address> addresses = geocoder.getFromLocation(loc.getLatitude(), loc.getLongitude(), 10); //<10>
-			      Log.i(TAG, "b4 for");
+			     
 			      for (Address address : addresses) {
 			        
 					this.txtInfo.append("\n" + address.getAddressLine(0));
-					Log.i(TAG, "append string");
+					
 			      } 
 			    } catch (IOException e) {
 			      Log.e("LocateMe", "Could not get Geocoder data", e);
 			    }
-			Log.i(TAG, "b4 return");
+			
 			urAddress = txtInfo.getText().toString();
+			FacebookIntegration.MSG = urAddress;
 			return urAddress;
 			
 		}
 		
-	/*	//--------------------fb functions
-		public void loginToFacebook() {
-	        mPrefs = getPreferences(MODE_PRIVATE);
-	        String access_token = mPrefs.getString("access_token", null);
-	        long expires = mPrefs.getLong("access_expires", 0);
-	     
-	        if (access_token != null) {
-	            facebook.setAccessToken(access_token);
-	            Log.i(TAG, "access token not null");
-	        }
-	     
-	        if (expires != 0) {
-	            facebook.setAccessExpires(expires);
-	            Log.i(TAG, "expires not z");
-	        }
-	     
-	        if (!facebook.isSessionValid()) {
-	            facebook.authorize(this,
-	                    new String[] { "email", "publish_stream" },
-	                    new DialogListener() {
-	     
-	                        //@Override
-	                        public void onCancel() {
-	                            // Function to handle cancel event
-	                        }
-	     
-	                       // @Override
-	                        public void onComplete(Bundle values) {
-	                            // Function to handle complete event
-	                            // Edit Preferences and update facebook acess_token
-	                            SharedPreferences.Editor editor = mPrefs.edit();
-	                            editor.putString("access_token",
-	                                    facebook.getAccessToken());
-	                            editor.putLong("access_expires",
-	                                    facebook.getAccessExpires());
-	                            editor.commit();
-	                            Log.i(TAG, "on complete");
-	                        }
-	     
-	                        //@Override
-	                        public void onError(DialogError error) {
-	                            // Function to handle error
-	     
-	                        }
-	     
-	                       // @Override
-	                        public void onFacebookError(FacebookError fberror) {
-	                            // Function to handle Facebook errors
-	     
-	                        }
-	     
-	                    });
-	        }
-	    }
-	    //-----------post on wall function
-	    public void postToWall() {
-	        // post on user's wall.
-	        facebook.dialog(this, "feed", new DialogListener() {
-	     
-	            @Override
-	            public void onFacebookError(FacebookError e) {
-	            }
-	     
-	            @Override
-	            public void onError(DialogError e) {
-	            }
-	     
-	            @Override
-	            public void onComplete(Bundle values) {
-	            }
-	     
-	            @Override
-	            public void onCancel() {
-	            }
-	        });
-	    }*/
-		
+	
 }

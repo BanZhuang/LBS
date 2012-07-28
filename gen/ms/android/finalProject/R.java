@@ -58,6 +58,7 @@ public final class R {
         public static final int lblcaddress=0x7f070004;
         public static final int lbluradd=0x7f070014;
         public static final int linearLayout1=0x7f070009;
+        public static final int list=0x7f070026;
         public static final int llo=0x7f070003;
         public static final int mapv=0x7f070005;
         public static final int mapvew=0x7f070013;

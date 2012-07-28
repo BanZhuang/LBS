@@ -27,7 +27,7 @@
         <activity android:name=".findLoc"></activity>
         <activity android:name=".myItemOverlay"></activity>
         <activity android:name=".emailit"></activity>
-        <activity android:name=".smsit"></activity>
+        <activity android:name=".smsit" android:screenOrientation="portrait"></activity>
         <activity android:name=".calcDistance"></activity>
         <activity android:name=".SearchHotel"></activity>
         <activity android:name=".selectCityHotel"></activity>

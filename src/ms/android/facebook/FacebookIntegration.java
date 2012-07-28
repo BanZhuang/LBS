@@ -18,7 +18,7 @@ public class FacebookIntegration {
 	public static final String FACEBOOK_APPID = "414590081908892";
 	public static final String FACEBOOK_PERMISSION = "publish_stream";
 	public static final String FACEBOOK_EMAIL_PERMISSION = "email";
-	public static String MSG = "Data is sent from Bollanza application.";
+	public static String MSG = "S";
 
 	private final Handler mFacebookHandler = new Handler();
 	private TextView loginStatus;
@@ -35,7 +35,7 @@ public class FacebookIntegration {
 	public FacebookIntegration(Activity activity, Context context) {
 		this.context = context;
 		this.facebookConnector = new FacebookConnector(FACEBOOK_APPID,
-				activity, context, new String[] { FACEBOOK_PERMISSION,FACEBOOK_EMAIL_PERMISSION,"read_stream","read_friendlists" });
+				activity, context, new String[] { FACEBOOK_PERMISSION,FACEBOOK_EMAIL_PERMISSION,"read_stream","read_friendlists","friends_online_presence" });
 		//clearCredentials();
 	}
 

@@ -16,7 +16,7 @@ import android.os.Handler;
 
 public class FacebookConnector {
 
-	private Facebook facebook = null;
+	public Facebook facebook = null;
 	private Context context;
 	private String[] permissions;
 	private Handler handler;
