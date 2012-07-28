@@ -352,14 +352,14 @@ public class Facebook {
 					try
 					{
 						String jsonUser = request("me");
-						JSONObject obj = null;
+					/*	JSONObject obj = null;
 						try {
 							obj = Util.parseJson(jsonUser);
 						} catch (FacebookError e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-						
+						*/
 						
 					
 					}
