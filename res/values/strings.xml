@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hello">Hello World, FindYourSelfActivity!</string>
+    <string name="app_name">Find YourSelf</string>
+    <string name="btnSearch">Search</string>
+    
+    <string-array name="cities_array">
+        
+		<item>Ahmadpur East</item>
+		<item>Ahmed Nager Chatha</item>
+		<item>Ali Khan Abad</item>
+		<item>Alipur</item>
+		<item>Arifwala</item>
+		<item>Attock</item>
+		<item>Bhalwal</item>
+		<item>Bahawalnagar</item>
+		<item>Bahawalpur</item>
+		<item>Bhakkar</item>
+		<item>Burewala</item>
+		<item>Chillianwala</item>
+		<item>Chakwal</item>
+		<item>Chichawatni</item>
+		<item>Chiniot</item>
+		<item>Chishtian</item>
+		<item>Chowk Azam</item>
+		<item>Daska</item>
+		<item>Darya Khan</item>
+		<item>Dera Ghazi Khan</item>
+		<item>Dhaular</item>
+		<item>Dina</item>
+		<item>Dinga</item>
+		<item>Dipalpur</item>
+		<item>Faisalabad</item>
+		<item>Fateh Jang</item>
+		<item>Ghakhar Mandi</item>
+		<item>Gojra</item>
+		<item>Gujranwala</item>
+		<item>Gujrat</item>
+		<item>Gujar Khan</item>
+		<item>Hafizabad</item>
+		<item>Haroonabad</item>
+		<item>Hasilpur</item>
+		<item>Haveli Lakha</item>
+		<item>Jalalpur Jattan</item>
+		<item>Jampur</item>
+		<item>Jaranwala</item>
+		<item>Jhang</item>
+		<item>Jhelum</item>
+		<item>Kalabagh</item>
+		<item>Karor Lal Esan</item>
+		<item>Kasur</item>
+		<item>Kamalia</item>
+		<item>Kamoke</item>
+		<item>Khanewal</item>
+		<item>Khanpur</item>
+		<item>Kharian</item>
+		<item>Khushab</item>
+		<item>Kot Adu</item>
+		<item>Jauharabad</item>
+		<item>Lahore</item>
+		<item>Lalamusa</item>
+		<item>Layyah</item>
+		<item>Liaquat Pur</item>
+		<item>Lodhran</item>
+		<item>Malakwal</item>
+		<item>Mamoori</item>
+		<item>Mailsi</item>
+		<item>Mandi Bahauddin</item>
+		<item>Mian Channu</item>
+		<item>Mianwali</item>
+		<item>Multan</item>
+		<item>Murree</item>
+		<item>Muridke</item>
+		<item>Mianwali Bangla</item>
+		<item>Muzaffargarh</item>
+		<item>Narowal</item>
+		<item>Okara</item>
+		<item>Renala Khurd</item>
+		<item>Pakpattan</item>
+		<item>Pattoki</item>
+		<item>Pir Mahal</item>
+		<item>Qaimpur</item>
+		<item>Qila Didar Singh</item>
+		<item>Rabwah</item>
+		<item>Raiwind</item>
+		<item>Rajanpur</item>
+		<item>Rahim Yar Khan</item>
+		<item>Rawalpindi</item>
+		<item>Sadiqabad</item>
+		<item>Safdarabad</item>
+		<item>Sahiwal</item>
+		<item>Sangla Hill</item>
+		<item>Sarai Alamgir</item>
+		<item>Sargodha</item>
+		<item>Shakargarh</item>
+		<item>Sheikhupura</item>
+		<item>Sialkot</item>
+		<item>Sohawa</item>
+		<item>Soianwala</item>
+		<item>Siranwali</item>
+		<item>Talagang</item>
+		<item>Taxila</item>
+		<item>Toba Tek Singh</item>
+		<item>Vehari</item>
+		<item>Wah Cantonment</item>
+		<item>Wazirabad</item>
+		
+		<item>Islamabad</item>
+		<item>Karachi</item>
+		<item>Peshawar</item>
+		<item>Quetta</item>
+		<item>Naraan</item>
+		<item>Kagaan</item>
+
+    </string-array>
+    
+
+</resources>

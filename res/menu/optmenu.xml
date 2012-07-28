@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item 
+        android:id="@+id/findAddress"
+        android:title="Find Address"
+        android:alphabeticShortcut="a"
+        android:icon="@drawable/address" />
+    
+    <item 
+        android:id="@+id/findDistances"
+        android:title="Find Distances"
+        android:alphabeticShortcut="d"
+        android:icon="@drawable/distance" />
+    
+    <item 
+        android:id="@+id/searchLoc"
+        android:title="Search Location"
+        android:alphabeticShortcut="s"
+        android:icon="@drawable/search" />
+    
+    <item 
+        android:id="@+id/myposition"
+        android:title="My Position"
+        android:alphabeticShortcut="f"
+        android:icon="@drawable/mypos" />
+    
+    <item 
+        android:id="@+id/smsLoc"
+        android:title="Share via SMS"
+        android:alphabeticShortcut="e"
+        android:icon="@drawable/mail" />
+    
+    <item 
+        android:id="@+id/fbLoc"
+        android:title="Post on FaceBook"
+        android:alphabeticShortcut="b"
+        android:icon="@drawable/facebook" />
+    
+    <item 
+        android:id="@+id/email"
+        android:title="Email using Client"
+        android:alphabeticShortcut="e"
+        android:icon="@drawable/mail" />
+    
+    
+    <item 
+        android:id="@+id/findHotel"
+        android:title="Find Hotel"
+        android:alphabeticShortcut="h" />
+    
+    <item 
+        android:id="@+id/help"
+        android:title="Help"
+        android:alphabeticShortcut="h"
+        android:icon="@drawable/help" />
+    
+    <item 
+        android:id="@+id/about"
+        android:title="About"
+        android:alphabeticShortcut="b" />
+
+</menu>
