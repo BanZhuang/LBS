@@ -10,13 +10,16 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.SEND_SMS"/>
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
 
     <application
         android:icon="@drawable/mainicon"
-        android:label="@string/app_name" >
+        android:label="@string/app_name"
+        android:theme="@android:style/Theme.NoTitleBar" >
         <uses-library android:name="com.google.android.maps"/>
         <activity
-            android:name=".FindYourSelfActivity"
+            android:name=".SplashActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,6 +27,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".FindYourSelfActivity"></activity>
         <activity android:name=".findLoc"></activity>
         <activity android:name=".myItemOverlay"></activity>
         <activity android:name=".emailit"></activity>
@@ -31,6 +35,8 @@
         <activity android:name=".calcDistance"></activity>
         <activity android:name=".SearchHotel"></activity>
         <activity android:name=".selectCityHotel"></activity>
+        <activity android:name=".ContactAccessor"></activity>
+        <activity android:name=".ContactInfo"></activity>
     </application>
 
 </manifest>

@@ -45,7 +45,7 @@ public class FacebookIntegration {
 	}
 
 	private String getFacebookMsg() {
-		return MSG + " at " + new Date().toLocaleString();
+		return MSG + "\n\n at " + new Date().toLocaleString();
 	}
 
 	public void postMessage() {

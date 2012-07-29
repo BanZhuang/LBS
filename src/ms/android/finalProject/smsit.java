@@ -9,7 +9,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.Contacts.People;
 import android.telephony.gsm.SmsManager;
 import android.view.View;
 
@@ -19,7 +23,7 @@ import android.widget.Toast;
  
 public class smsit extends Activity 
 {
-    Button btnSendSMS;
+    Button btnSendSMS, btnSelCont, btnClearCont;
     EditText txtPhoneNo;
     EditText txtMessage;
     String message;
@@ -27,6 +31,9 @@ public class smsit extends Activity
 	private BroadcastReceiver deliverReciever;
 	private ArrayList<PendingIntent> sendApii = new ArrayList<PendingIntent>();
 	private ArrayList<PendingIntent> devliverApii = new ArrayList<PendingIntent>();
+	public static final int PICK_CONTACT_REQUEST    = 1;
+	private final ContactAccessor mContactAccessor = ContactAccessor.getInstance();
+
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) 
@@ -35,6 +42,8 @@ public class smsit extends Activity
         setContentView(R.layout.smsloc);        
  
         btnSendSMS = (Button) findViewById(R.id.btnSendSMS);
+        btnSelCont = (Button) findViewById(R.id.btnSelContact);
+        btnClearCont = (Button) findViewById(R.id.btnDelContact);
         txtPhoneNo = (EditText) findViewById(R.id.txtPhoneNo);
         txtMessage = (EditText) findViewById(R.id.txtMessage);
         
@@ -44,6 +53,47 @@ public class smsit extends Activity
 		
 		
 		txtMessage.setText(message);
+		
+		String SENT = "SMS_SENT";
+		String DELIVERED = "SMS_DELIVERED";
+
+		PendingIntent sentPI = PendingIntent.getBroadcast(this, 0, new Intent(
+				SENT), 0);
+		sendApii.add(sentPI);
+		
+		
+
+		PendingIntent deliveredPI = PendingIntent.getBroadcast(this, 0,
+				new Intent(DELIVERED), 0);
+
+		devliverApii.add(deliveredPI);
+		
+		
+
+		//selecting a contact from the phone contact
+		btnClearCont.setOnClickListener(new View.OnClickListener() 
+		{
+
+			@Override
+			public void onClick(View arg0) {
+				txtPhoneNo.setText("");
+			}
+		});
+
+		
+		//selecting a contact from the phone contact
+		btnSelCont.setOnClickListener(new View.OnClickListener() 
+        {
+
+			@Override
+			public void onClick(View arg0) {
+				pickContact();
+				
+			}
+			
+        });
+		
+		
  
         btnSendSMS.setOnClickListener(new View.OnClickListener() 
         {
@@ -91,6 +141,7 @@ public class smsit extends Activity
 			}
 		};
 		
+		
 		 deliverReciever = new BroadcastReceiver() {
 			
 			@Override
@@ -109,27 +160,65 @@ public class smsit extends Activity
 				
 			}
 		};
+		
+		
+		registerReceiver(sendReciever, new IntentFilter(SENT));
+		registerReceiver(deliverReciever, new IntentFilter(DELIVERED));
     }
+    
+    //contact selection
+    
+    protected void pickContact() {
+        startActivityForResult(mContactAccessor.getPickContactIntent(), PICK_CONTACT_REQUEST);
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PICK_CONTACT_REQUEST && resultCode == RESULT_OK) {
+            loadContactInfo(data.getData());
+        }
+    }
+    /**
+     * Load contact information on a background thread.
+     */
+    private void loadContactInfo(Uri contactUri) {
+
+        /*
+         * We should always run database queries on a background thread. The database may be
+         * locked by some process for a long time.  If we locked up the UI thread while waiting
+         * for the query to come back, we might get an "Application Not Responding" dialog.
+         */
+        AsyncTask<Uri, Void, ContactInfo> task = new AsyncTask<Uri, Void, ContactInfo>() {
+
+            @Override
+            protected ContactInfo doInBackground(Uri... uris) {
+                return mContactAccessor.loadContact(getContentResolver(), uris[0]);
+            }
+
+            @Override
+            protected void onPostExecute(ContactInfo result) {
+                bindView(result);
+            }
+        };
+
+        task.execute(contactUri);
+    }
+    
+    /**
+     * Displays contact information: name and phone number.
+     */
+    protected void bindView(ContactInfo contactInfo) {
+        txtPhoneNo.setText(contactInfo.getPhoneNumber());
+    }
+
+
+
+
   //---sends an SMS message to another device---
     private void sendSMS(String phoneNumber, String message)
     {        
-		String SENT = "SMS_SENT";
-		String DELIVERED = "SMS_DELIVERED";
-
-		PendingIntent sentPI = PendingIntent.getBroadcast(this, 0, new Intent(
-				SENT), 0);
-		sendApii.add(sentPI);
-
-		PendingIntent deliveredPI = PendingIntent.getBroadcast(this, 0,
-				new Intent(DELIVERED), 0);
-
-		devliverApii.add(deliveredPI);
-
-		// ---when the SMS has been sent---
-		registerReceiver(sendReciever, new IntentFilter(SENT));
-
+		
 		// ---when the SMS has been delivered---
-		registerReceiver(deliverReciever, new IntentFilter(DELIVERED));
+		
 
 		SmsManager sms = SmsManager.getDefault();
 		// sms.sendTextMessage(phoneNumber, null, message, sentPI, deliveredPI);
@@ -147,4 +236,5 @@ public class smsit extends Activity
     	unregisterReceiver(deliverReciever);
     	super.onBackPressed();
     }
+    
 }

@@ -376,7 +376,7 @@ public class FindYourSelfActivity extends MapActivity {
 			    }
 			
 			urAddress = txtInfo.getText().toString();
-			FacebookIntegration.MSG = urAddress;
+			FacebookIntegration.MSG = urAddress + "\n\nYou can check the location on map via link given below\n\nhttp://maps.google.com/maps/?q=" + location.getLatitude() + "," + location.getLongitude();
 			return urAddress;
 			
 		}

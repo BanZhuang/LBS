@@ -23,7 +23,8 @@
         android:text=" OK "
         android:layout_marginTop="5dp"
         android:layout_marginRight="5dp"
-        android:layout_below="@+id/image"
+        android:layout_below="@+id/lblAddress"
+        android:layout_marginLeft="200dp"
         />
  
 </RelativeLayout>
