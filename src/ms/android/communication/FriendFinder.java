@@ -43,11 +43,13 @@ public class FriendFinder implements Communication {
 		items = new OverlayItem[bean.length];
 		
 		for(int i = 0 ;i < bean.length; i++){
+			String Name = bean[i].fields.get("name").value;
+			String Address = bean[i].fields.get("address").value;
 			String lat = bean[i].fields.get("lat").value;
 			String lng = bean[i].fields.get("lng").value;
 			GeoPoint point = new GeoPoint((int)(Double.valueOf(lat)*1E6),(int)(Double.valueOf(lng)*1E6));
-			OverlayItem overlayItem = new OverlayItem(point, "Example Tittle", 
-					"Example Snipet");
+			OverlayItem overlayItem = new OverlayItem(point, Name, 
+					Address);
 			items[i] = overlayItem;
 
 		}
@@ -65,6 +67,8 @@ public class FriendFinder implements Communication {
 		MainBean bean[] = null;
 		//parsing the json array
 		String id = "";
+		String Name = "";
+		String Address = "";
 		String Lat = "";
 		String Lng = "";
 		String Status = "";
@@ -72,11 +76,15 @@ public class FriendFinder implements Communication {
 				for(int i=0;i<array.length();i++){
 					JSONObject json = array.getJSONObject(i);
 					id = json.getString("ID");
+					Name = json.getString("Name");
+					Address = json.getString("Address");
 					Lat = json.getString("Latitude");
 					Lng = json.getString("Longitude");
 					Status =  json.getString("Visible");
 					MainBean b = new MainBean();
 					b.fields.put("id", new Field("id", id));
+					b.fields.put("name", new Field("name", Name));
+					b.fields.put("address", new Field("address", Address));
 					b.fields.put("lat", new Field("lat", Lat));
 					b.fields.put("lng", new Field("lng", Lng));
 					b.fields.put("status", new Field("status", Status));

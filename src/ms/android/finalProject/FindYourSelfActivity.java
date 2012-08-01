@@ -470,7 +470,7 @@ public class FindYourSelfActivity extends MapActivity {
 				if(point !=null){
 					final MapController mc = mv.getController();
 					mc.animateTo(point);
-					mc.setZoom(5);
+					//mc.setZoom(5);
 				}
 				
 			}
