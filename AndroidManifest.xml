@@ -37,6 +37,8 @@
         <activity android:name=".selectCityHotel"></activity>
         <activity android:name=".ContactAccessor"></activity>
         <activity android:name=".ContactInfo"></activity>
+        
+        <activity android:name="ms.android.fyp.friendsfinder.FFMainActivity"></activity>
     </application>
 
 </manifest>

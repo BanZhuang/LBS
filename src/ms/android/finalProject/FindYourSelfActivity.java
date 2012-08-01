@@ -4,20 +4,27 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.List;
 
+import ms.android.communication.CommunicationFactory;
+import ms.android.communication.WebCommunication;
+import ms.android.custom.overlay.SimpleItemizedOverlay;
 import ms.android.facebook.FacebookIntegration;
+import ms.android.facebookSDK.Facebook;
+
+import org.json.JSONObject;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
-import android.location.Criteria;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
@@ -33,7 +40,10 @@ import android.widget.Toast;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
+import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
+import com.google.android.maps.Overlay;
+import com.google.android.maps.OverlayItem;
 
 public class FindYourSelfActivity extends MapActivity {
 	MapView mv;
@@ -50,10 +60,15 @@ public class FindYourSelfActivity extends MapActivity {
 	private static final String TAG = "FindYour";
 	//----------------fb data
     public FacebookIntegration mFacebook;
+    public OverlayItem[] items;
+    List<Overlay> mapOverlays;
  
     // Instance of Facebook Class
   
     String FILENAME = "AndroidSSO_data";
+	private Drawable drawable;
+	private SimpleItemizedOverlay itemizedOverlay;
+  
 	//--------------------------
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -65,7 +80,11 @@ public class FindYourSelfActivity extends MapActivity {
         txtInfo = (TextView) findViewById(R.id.lbluradd);
         locM = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         geocoder = new Geocoder(context);
-       
+    
+        // first overlay
+     		drawable = getResources().getDrawable(R.drawable.marker2);
+     		itemizedOverlay = new SimpleItemizedOverlay(drawable, mv);
+     		mapOverlays = mv.getOverlays();
        
         if(locM.isProviderEnabled(LocationManager.GPS_PROVIDER))
         {
@@ -124,19 +143,6 @@ public class FindYourSelfActivity extends MapActivity {
         mv.setBuiltInZoomControls(true);
     }
     
-    private void addMarker()
-    {
-    	Log.i(TAG, "add marker");
-    	marker=getResources().getDrawable(R.drawable.marker);
-        int markerWidth = marker.getIntrinsicWidth();
-        int markerHeight = marker.getIntrinsicHeight();
-        marker.setBounds(0, markerHeight, markerWidth, 0);
-        myItemOverlay myItemizedOverlay = new myItemOverlay(marker,this);
-        mv.getOverlays().add(myItemizedOverlay);
-        myItemizedOverlay.addItem(gp, "myPoint1", "Its Multan Coordinates");
-    }
-    
-    
     
     public class GeoUpdateHandler implements LocationListener {
 
@@ -145,13 +151,7 @@ public class FindYourSelfActivity extends MapActivity {
 			Log.i(TAG, "loc changed");
 			lat = (int) (location.getLatitude() * 1E6);
 			lng = (int) (location.getLongitude() * 1E6);
-			gp = new GeoPoint(lat, lng);
-			mv.getController().setCenter(gp);
 			
-			mv.getController().animateTo(gp);
-			
-			//marking the location with the marker
-			addMarker();
 		}
 
 		@Override
@@ -326,11 +326,30 @@ public class FindYourSelfActivity extends MapActivity {
 				
 				//hotels activity based on location
 			case R.id.findHotel:
-				Intent hotelsearch = new Intent(FindYourSelfActivity.this,selectCityHotel.class);
-				startActivity(hotelsearch);
+				
+				CommunicationFactory.loadCom(true);
+				GetData  getData = new GetData(this);
+				getData.execute();
+			
 				break;
 			case R.id.list:
 				getUserList();
+				break;
+				
+			case R.id.help:
+				Facebook fb = new Facebook("414590081908892");
+				String id = null;
+				try
+				{
+					JSONObject me = new JSONObject(mFacebook.facebookConnector.facebook.request("me"));
+					id = me.getString("id");
+				}
+				catch(Exception e)
+				{
+					
+				}
+				String AT = fb.getAccessToken();
+				Toast.makeText(getApplicationContext(), fb.getAppId() + " / " + id + " / " + AT, Toast.LENGTH_LONG).show();
 				break;
 			}
 			return(super.onOptionsItemSelected(item));
@@ -339,8 +358,36 @@ public class FindYourSelfActivity extends MapActivity {
 		private void getUserList() {
 			try {
 				if(mFacebook != null){
-				String response = mFacebook.facebookConnector.facebook.request("me/friends");
-				Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
+				String response = mFacebook.facebookConnector.facebook.request("me");
+				//Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
+				//-----------------------------
+				final Dialog adialog = new Dialog(context);
+				adialog.setContentView(R.layout.about);
+				adialog.setTitle("Your Detail . . .");
+				Log.i(TAG, "set text address");
+	 
+				// set the custom dialog components - text, image and button
+				TextView txtabout = (TextView) adialog.findViewById(R.id.lblabout);
+				
+				
+				
+				txtabout.setText(response);
+				ImageView aimage = (ImageView) adialog.findViewById(R.id.imageabout);
+				aimage.setImageResource(R.drawable.close);
+				Log.i(TAG, "btn");
+	 
+				Button adialogButton = (Button) adialog.findViewById(R.id.dialogButtonClose);
+				// if button is clicked, close the custom dialog
+				adialogButton.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						adialog.dismiss();
+					}
+				});
+	 
+				adialog.show();
+				//-----------------------------------
+				
 				}
 			} catch (MalformedURLException e) {
 				// TODO Auto-generated catch block
@@ -381,5 +428,52 @@ public class FindYourSelfActivity extends MapActivity {
 			
 		}
 		
+		public class GetData extends AsyncTask<Void,Void, Void>{
+			 public ProgressDialog progressDialog = null;
+			 private Context context ;
+			 public GetData(Context context){
+				  this.context = context;
+			 }
+			@Override
+			protected void onPreExecute() {
+				progressDialog = ProgressDialog.show(context, "","Getting Data.....");
+			}
+			
+			
+			
+			@Override
+			protected Void doInBackground(Void... params) {
+				
+				try {
+					 items = CommunicationFactory.com.getPinPoints(context);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+					
+				return null;
+			}
+			
+			@Override
+			protected void onPostExecute(Void result) {
+				
+				progressDialog.dismiss();
+				
+				GeoPoint point = null;
+				for(int i = 0 ; i< items.length; i++){
+					
+					point = items[i].getPoint();
+					itemizedOverlay.addOverlay(items[i]);
+				}
+				
+				mapOverlays.add(itemizedOverlay);
+				if(point !=null){
+					final MapController mc = mv.getController();
+					mc.animateTo(point);
+					mc.setZoom(5);
+				}
+				
+			}
+		}
 	
 }
